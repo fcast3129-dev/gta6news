@@ -1,0 +1,43 @@
+name: Video Auto Bot
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 12 * * *"
+
+jobs:
+  generate-video:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+
+      - name: Install Python dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run video bot
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          AUTO_PUBLISH: "false"
+          NICHE: "GTA 6"
+          LANGUAGE: "français"
+        run: |
+          python main.py
+
+      - name: Upload generated video
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-video
+          path: output/
