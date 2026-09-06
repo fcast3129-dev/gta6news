@@ -92,10 +92,10 @@ def build_video(plan: dict, audio_path: Path, output_path: Path) -> Path:
 
     concat_file = work / "slides.txt"
     with concat_file.open("w", encoding="utf-8") as f:
-        for slide in slide_paths:
-            f.write(f"file '{slide.as_posix()}'\n")
-            f.write(f"duration {per_scene:.3f}\n")
-        f.write(f"file '{slide_paths[-1].as_posix()}'\n")
+    for slide in slide_paths:
+        f.write(f"file '{slide.resolve().as_posix()}'\n")
+        f.write(f"duration {per_scene:.3f}\n")
+    f.write(f"file '{slide_paths[-1].resolve().as_posix()}'\n")
 
     silent_video = work / "silent.mp4"
 
